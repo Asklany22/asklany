@@ -113,12 +113,20 @@ def predict():
         processed_image = preprocess_image(image_file)
         
         # Run inference using the 'serve' signature
+        if "serve" not in model.signatures:
+            available_sigs = list(model.signatures.keys())
+            return jsonify({
+                "error": f"'serve' signature not found. Available signatures: {available_sigs}"
+            }), 500
+        
         infer = model.signatures["serve"]
         predictions = infer(tf.constant(processed_image))
         
         # Get the output tensor (might be in different keys)
         # Try common output keys
         if isinstance(predictions, dict):
+            if len(predictions) == 0:
+                return jsonify({"error": "Model returned empty predictions"}), 500
             # Try to find the output tensor
             output_key = list(predictions.keys())[0]
             output = predictions[output_key].numpy()

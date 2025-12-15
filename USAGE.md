@@ -83,8 +83,8 @@ The labels JSON should be in one of these formats:
 }
 ```
 
-**Format 2: Dictionary with integer keys**
-```json
+**Format 2: Dictionary with integer keys (in Python/code, not pure JSON)**
+```python
 {
   0: "class_name_0",
   1: "class_name_1",

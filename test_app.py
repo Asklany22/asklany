@@ -3,18 +3,17 @@ Simple test to validate Flask API endpoints
 """
 import sys
 import os
+from unittest.mock import MagicMock
 
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(__file__))
 
+# Mock tensorflow to avoid heavy installation
+sys.modules['tensorflow'] = MagicMock()
+
 def test_imports():
     """Test that all imports work"""
     try:
-        # Mock tensorflow to avoid heavy installation
-        import sys
-        from unittest.mock import MagicMock
-        sys.modules['tensorflow'] = MagicMock()
-        
         import app
         print("✓ All imports successful")
         return True
@@ -25,10 +24,6 @@ def test_imports():
 def test_flask_app():
     """Test that Flask app is created"""
     try:
-        import sys
-        from unittest.mock import MagicMock
-        sys.modules['tensorflow'] = MagicMock()
-        
         from app import app as flask_app
         print(f"✓ Flask app created: {flask_app}")
         return True
@@ -39,10 +34,6 @@ def test_flask_app():
 def test_routes():
     """Test that routes are registered"""
     try:
-        import sys
-        from unittest.mock import MagicMock
-        sys.modules['tensorflow'] = MagicMock()
-        
         from app import app as flask_app
         routes = [str(rule) for rule in flask_app.url_map.iter_rules()]
         print(f"✓ Registered routes: {routes}")
@@ -59,10 +50,6 @@ def test_routes():
 def test_health_endpoint():
     """Test health endpoint without model"""
     try:
-        import sys
-        from unittest.mock import MagicMock
-        sys.modules['tensorflow'] = MagicMock()
-        
         from app import app as flask_app
         with flask_app.test_client() as client:
             response = client.get('/health')
